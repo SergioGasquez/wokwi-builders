@@ -22,6 +22,7 @@ RUN bash fetch.sh
 COPY compile.sh /home/esp/
 RUN mkdir -p /home/esp/build-in /home/esp/build-out
 
+RUN rm espressif-trainings/intro/hardware-check/Cargo.toml
 ENV HEXI_SRC_DIR="/home/esp/build-in"
 ENV HEXI_BUILD_CMD="bash /home/esp/compile.sh"
 ENV HEXI_OUT_HEX="/home/esp/build-out/project.bin"
