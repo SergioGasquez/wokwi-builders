@@ -4,18 +4,11 @@ USER esp
 ENV USER=esp
 
 # Install extra crates
-RUN curl -L "https://github.com/rustsec/rustsec/releases/download/cargo-audit/v0.17.6/cargo-audit-x86_64-unknown-linux-gnu-v0.17.6.tgz" -o "${HOME}/.cargo/bin/cargo-audit.tgz" && \
-    tar xf "${HOME}/.cargo/bin/cargo-audit.tgz" -C ${HOME}/.cargo/bin --strip-components 1 && \
-    chmod u+x "${HOME}/.cargo/bin/cargo-audit" && \
+RUN cargo install cargo-audit && \
     GENERATE_VERSION=$(git ls-remote --refs --sort="version:refname" --tags "https://github.com/cargo-generate/cargo-generate" | cut -d/ -f3- | tail -n1)  && \
     curl -L "https://github.com/cargo-generate/cargo-generate/releases/latest/download/cargo-generate-${GENERATE_VERSION}-x86_64-unknown-linux-gnu.tar.gz" -o "${HOME}/.cargo/bin/cargo-generate.tar.gz" && \
     tar xf "${HOME}/.cargo/bin/cargo-generate.tar.gz" -C ${HOME}/.cargo/bin && \
     chmod u+x "${HOME}/.cargo/bin/cargo-generate"
-
-
-RUN ldconfig /usr/local/lib64/
-RUN ln -s libcrypto.so.3 libcrypto.so
-RUN ln -s libssl.so.3 libssl.so
 
 # Generate project templates
 RUN cargo generate --vcs none esp-rs/esp-idf-template cargo --name rust-project-esp32 -d mcu=esp32 -d advanced=false
