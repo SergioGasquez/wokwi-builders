@@ -12,6 +12,11 @@ RUN curl -L "https://github.com/rustsec/rustsec/releases/download/cargo-audit/v0
     tar xf "${HOME}/.cargo/bin/cargo-generate.tar.gz" -C ${HOME}/.cargo/bin && \
     chmod u+x "${HOME}/.cargo/bin/cargo-generate"
 
+
+RUN ldconfig /usr/local/lib64/
+RUN ln -s libcrypto.so.3 libcrypto.so
+RUN ln -s libssl.so.3 libssl.so
+
 # Generate project templates
 RUN cargo generate --vcs none esp-rs/esp-idf-template cargo --name rust-project-esp32 -d mcu=esp32 -d advanced=false
 RUN cargo generate --vcs none esp-rs/esp-idf-template cargo --name rust-project-esp32s2 -d mcu=esp32s2 -d advanced=false
