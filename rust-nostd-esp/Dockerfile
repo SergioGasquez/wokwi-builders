@@ -3,8 +3,12 @@ FROM espressif/idf-rust:all_1.82.0.3
 USER esp
 ENV USER=esp
 
+
 # Install extra crates
-RUN cargo install cargo-audit && cargo install esp-generate && \
+RUN cargo install cargo-audit &&  \
+    ARCH=$($HOME/.cargo/bin/rustup show | grep "Default host" | sed -e 's/.* //') && \
+    curl -L "https://github.com/esp-rs/espup/releases/latest/download/esp-generate-${ARCH}" -o "${HOME}/.cargo/bin/esp-generate" && \
+    chmod u+x "${HOME}/.cargo/bin/esp-generate" && \
     curl -L "https://github.com/SergioGasquez/rnamer/releases/latest/download/rnamer-x86_64-unknown-linux-gnu" -o "${HOME}/.cargo/bin/rnamer" && \
     chmod u+x "${HOME}/.cargo/bin/rnamer"
 
